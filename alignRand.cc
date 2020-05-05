@@ -12,7 +12,7 @@
 int main(int argc , char* argv[]){
   // measure the run time
   auto start = std::chrono::system_clock::now();
-  
+
   if(argc !=5) {
     std::cerr << "Usage: "<<argv[0]<< " target.pdb model.pdb num_rotations dist_threshold" << std::endl;
     exit(1);
@@ -61,7 +61,7 @@ int main(int argc , char* argv[]){
   molTarget+=(-vectTargetMass);
 
   // next we insert the target molecule into hash
-  // this will help us to find atoms that are close faster 
+  // this will help us to find atoms that are close faster
   GeomHash <Vector3,int> gHash(3,m_fDistThr); // 3 is a dimension and m_fDistThr is the size of the hash cube
   for(unsigned int i=0; i<molTarget.size(); i++) {
     gHash.insert(molTarget[i].position(), i); // coordinate is the key to the hash, we store atom index
@@ -74,24 +74,24 @@ int main(int argc , char* argv[]){
     // random rotation matrix
     Matrix3 rotation((drand48()-0.5)*2*3.1415,
                      (drand48()-0.5)*2*3.1415,
-                     (drand48()-0.5)*2*3.1415); 
-    
+                     (drand48()-0.5)*2*3.1415);
+
     // match is a class that stores the correspondence list, eg.
-    // pairs of atoms, one from each molecule, that are matching 
+    // pairs of atoms, one from each molecule, that are matching
     Match match;
 
     // apply rotation on each atom in the model molecule and
-    // add the pairs of atoms (one from target and one from model) 
+    // add the pairs of atoms (one from target and one from model)
     // that are close enough to the match list
     for(unsigned int i=0; i< molModel.size(); i++) {
       Vector3 mol_atom = rotation*molModel[i].position(); // rotate
 
       // find close target molecule atoms using the hash
-      HashResult<int> result; 
+      HashResult<int> result;
       gHash.query(mol_atom, m_fDistThr, result); // key is mol atom coordinate
 
       // check if the atoms in the result are inside the distance threshold
-      // the hash is a cube shape, there can be atoms further that the threshold 
+      // the hash is a cube shape, there can be atoms further that the threshold
       for(auto x = result.begin(); x != result.end(); x++) {
         float dist = mol_atom.dist(molTarget[*x].position());
 	if(dist <= m_fDistThr) {
@@ -118,7 +118,7 @@ int main(int argc , char* argv[]){
     RigidTrans3(Vector3(0,0,0),(-vectModelMass)) << std::endl;
 
   auto end = std::chrono::system_clock::now();
- 
+
   std::chrono::duration<double> elapsed_seconds = end-start;
   std::cout << "elapsed time: " << elapsed_seconds.count() << "s" << std::endl;
 

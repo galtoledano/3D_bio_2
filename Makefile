@@ -5,7 +5,7 @@ LDFLAGS = -lstdc++ -lm
 
 # User defined classes and modules. (no file suffixes)
 
-CLASSES = Vector3 Atom Rotation3 Matrix3 RigidTrans3 PDB Match numerics alignRand
+CLASSES = Vector3 Atom Rotation3 Matrix3 RigidTrans3 PDB Match numerics alignRand structalign
 
 # Prepare object and source file list using pattern substitution func.
 ALL  = $(CLASSES)
